@@ -1,7 +1,7 @@
 name: Bug Report
 description: Report a bug to help us improve
 title: "[Bug] "
-labels: ["bug"]
+labels: ["type: fix", "priority: low"]
 assignees: []
 
 body:
