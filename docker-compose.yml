@@ -1,0 +1,67 @@
+# Core services - PostgreSQL, Marquez
+#
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.airflow.yml up -d
+#
+# Marquez UI: http://localhost:3000
+# Marquez API: http://localhost:9000/api/v1/namespaces
+
+---
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 10s
+      retries: 5
+      start_period: 5s
+    restart: always
+
+  marquez-api:
+    image: marquezproject/marquez:0.51.1
+    environment:
+      MARQUEZ_PORT: 9000
+      MARQUEZ_ADMIN_PORT: 9001
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: marquez
+      POSTGRES_USER: marquez
+      POSTGRES_PASSWORD: marquez
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    entrypoint:
+      [
+        "/opt/marquez/wait-for-it.sh",
+        "postgres:5432",
+        "--",
+        "./entrypoint.sh",
+      ]
+    restart: always
+
+  marquez-web:
+    image: marquezproject/marquez-web:0.51.1
+    environment:
+      MARQUEZ_HOST: marquez-api
+      MARQUEZ_PORT: 9000
+      WEB_PORT: 3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - marquez-api
+    restart: always
+
+volumes:
+  postgres-volume:
