@@ -12,11 +12,8 @@ DBT + Airflow + OpenLineage 기반 컬럼 단위 리니지 샌드박스
 # 초기화 (최초 1회)
 docker compose -f docker-compose.yml -f docker-compose.airflow.yml up airflow-init
 
-# 전체 서비스 기동
+# 전체 서비스 기동 (Flower 포함)
 docker compose -f docker-compose.yml -f docker-compose.airflow.yml up -d
-
-# Flower 포함 기동
-docker compose -f docker-compose.yml -f docker-compose.airflow.yml --profile flower up -d
 ```
 
 ## 종료
