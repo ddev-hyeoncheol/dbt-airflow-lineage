@@ -10,7 +10,9 @@
 
 ---
 x-airflow-common: &airflow-common
-  image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:3.1.8}
+  build:
+    context: .
+    dockerfile: docker/airflow/Dockerfile
   env_file:
     - airflow/.env
   environment: &airflow-common-env
@@ -33,6 +35,7 @@ x-airflow-common: &airflow-common
     - ./airflow/logs:/opt/airflow/logs
     - ./airflow/config:/opt/airflow/config
     - ./airflow/plugins:/opt/airflow/plugins
+    - ./dbt:/opt/dbt
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on: &airflow-common-depends-on
     redis:
