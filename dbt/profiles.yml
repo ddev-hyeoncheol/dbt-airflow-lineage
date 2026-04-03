@@ -1,0 +1,12 @@
+warehouse:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: postgres
+      port: 5432
+      user: dbt
+      password: dbt
+      dbname: warehouse
+      schema: public
+      threads: 4
