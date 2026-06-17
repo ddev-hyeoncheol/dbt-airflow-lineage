@@ -29,6 +29,7 @@ jobs:
         with:
           ref: ${{ env.TEMPLATE_BRANCH }}
           path: template
+          fetch-depth: 0
 
       - name: Sync template changes
         env:
@@ -55,20 +56,24 @@ jobs:
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           git -C "${target_dir}" switch -C "${SYNC_BRANCH}" "origin/${default_branch}"
+          git -C "${target_dir}" remote add template "${template_dir}"
+          git -C "${target_dir}" fetch template "${TEMPLATE_BRANCH}" --quiet
 
-          rsync -a --delete \
-            --exclude ".git/" \
-            "${template_dir}/" \
-            "${target_dir}/"
+          if ! git -C "${target_dir}" merge \
+            --no-ff \
+            --allow-unrelated-histories \
+            -X theirs \
+            -m "${commit_message}" \
+            FETCH_HEAD; then
+            echo "::error::Template merge conflict occurred for ${{ matrix.repo }}."
+            exit 1
+          fi
 
-          git -C "${target_dir}" add -A
-
-          if git -C "${target_dir}" diff --cached --quiet; then
+          if git -C "${target_dir}" diff --quiet "origin/${default_branch}..HEAD"; then
             echo "No template changes for ${{ matrix.repo }}."
             exit 0
           fi
 
-          git -C "${target_dir}" commit -m "${commit_message}"
           git -C "${target_dir}" push --force-with-lease origin "HEAD:${SYNC_BRANCH}"
 
           pr_body="$(cat <<BODY
