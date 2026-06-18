@@ -9,7 +9,8 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Set JAVA_HOME pointing to the default path automatically mapped by the debian package manager
+# Create a symbolic link to default-java directory to support both amd64 and arm64 architectures
+RUN ln -s /usr/lib/jvm/java-17-openjdk-* /usr/lib/jvm/default-java
 ENV JAVA_HOME=/usr/lib/jvm/default-java
 
 USER airflow
