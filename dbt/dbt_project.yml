@@ -16,3 +16,6 @@ models:
     dw:
       +materialized: table
       +schema: dw
+    dm:
+      +materialized: table
+      +schema: dm

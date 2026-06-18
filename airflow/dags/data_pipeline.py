@@ -90,9 +90,15 @@ with DAG(
         bash_command="dbt run --project-dir /opt/airflow/dbt --profiles-dir /opt/airflow/dbt --select customer_orders",
     )
 
-    # Task dependencies: Ingestion -> DW Summary
-    _ = [
-        ingest_customers,
-        ingest_orders,
-        ingest_order_items,
-    ] >> customer_orders
+    # dbt DM Model (Table Materialization)
+    daily_sales_summary = BashOperator(
+        task_id="daily_sales_summary",
+        bash_command="dbt run --project-dir /opt/airflow/dbt --profiles-dir /opt/airflow/dbt --select daily_sales_summary",
+    )
+
+    # Task dependencies: Ingestion -> DW -> DM
+    _ = (
+        [ingest_customers, ingest_orders, ingest_order_items]
+        >> customer_orders
+        >> daily_sales_summary
+    )
