@@ -11,7 +11,12 @@ RUN apt-get update \
 
 # Create a symbolic link to default-java directory to support both amd64 and arm64 architectures
 RUN ln -s /usr/lib/jvm/java-17-openjdk-* /usr/lib/jvm/default-java
+# Set JAVA_HOME pointing to the default path automatically mapped by the debian package manager
 ENV JAVA_HOME=/usr/lib/jvm/default-java
+
+# Download PostgreSQL JDBC driver for Spark Ingestion to avoid real-time network downloads
+ADD https://repo1.maven.org/maven2/org/postgresql/postgresql/42.7.11/postgresql-42.7.11.jar /opt/airflow/postgresql-42.7.11.jar
+RUN chmod 644 /opt/airflow/postgresql-42.7.11.jar
 
 USER airflow
 # Install PySpark for local spark processing
