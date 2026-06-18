@@ -1,5 +1,11 @@
-# Created by https://www.toptal.com/developers/gitignore/api/python,macos
-# Edit at https://www.toptal.com/developers/gitignore?templates=python,macos
+# Created by https://www.toptal.com/developers/gitignore/api/python,dbt,macos
+# Edit at https://www.toptal.com/developers/gitignore?templates=python,dbt,macos
+
+### dbt ###
+target/
+dbt_modules/
+dbt_packages/
+logs/
 
 ### macOS ###
 # General
@@ -110,7 +116,6 @@ docs/_build/
 
 # PyBuilder
 .pybuilder/
-target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
@@ -206,7 +211,7 @@ poetry.toml
 # LSP config files
 pyrightconfig.json
 
-# End of https://www.toptal.com/developers/gitignore/api/python,macos
+# End of https://www.toptal.com/developers/gitignore/api/python,dbt,macos
 
 # =========================================================================
 # Airflow & dbt Custom Ignores

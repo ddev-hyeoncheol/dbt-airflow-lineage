@@ -19,5 +19,5 @@ ADD https://repo1.maven.org/maven2/org/postgresql/postgresql/42.7.11/postgresql-
 RUN chmod 644 /opt/airflow/postgresql-42.7.11.jar
 
 USER airflow
-# Install PySpark for local spark processing
-RUN pip install --no-cache-dir pyspark
+# Install PySpark and dbt-postgres for local spark and transform processing
+RUN pip install --no-cache-dir pyspark dbt-postgres

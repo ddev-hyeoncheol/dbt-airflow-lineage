@@ -1,7 +1,7 @@
 from datetime import datetime
 from airflow import DAG
+from airflow.providers.standard.operators.bash import BashOperator
 from airflow.providers.standard.operators.python import PythonOperator
-from airflow.providers.standard.operators.empty import EmptyOperator
 
 # PostgreSQL connection configurations
 JDBC_URL = "jdbc:postgresql://postgres:5432/airflow"
@@ -84,12 +84,15 @@ with DAG(
         },
     )
 
-    # Placeholder for subsequent dbt tasks
-    dbt_transform_placeholder = EmptyOperator(task_id="dbt_transform_placeholder")
+    # dbt DW Model (Table Materialization)
+    customer_orders = BashOperator(
+        task_id="customer_orders",
+        bash_command="dbt run --project-dir /opt/airflow/dbt --profiles-dir /opt/airflow/dbt --select customer_orders",
+    )
 
-    # Task dependencies
+    # Task dependencies: Ingestion -> DW Summary
     _ = [
         ingest_customers,
         ingest_orders,
         ingest_order_items,
-    ] >> dbt_transform_placeholder
+    ] >> customer_orders
