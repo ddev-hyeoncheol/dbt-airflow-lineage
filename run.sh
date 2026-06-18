@@ -4,13 +4,14 @@
 COMPOSE_FILE="docker-compose-airflow.yml"
 
 show_usage() {
-    echo "Usage: $0 {up|down|restart|logs|ps|cli}"
+    echo "Usage: $0 {up|down|restart|logs|ps|cli|build}"
     echo "  up      : Start Airflow containers in background (-d)"
     echo "  down    : Stop and remove Airflow containers"
     echo "  restart : Restart Airflow containers"
     echo "  logs    : Follow container logs (optionally pass service name, e.g., $0 logs airflow-scheduler)"
     echo "  ps      : Check status of running containers"
     echo "  cli     : Access the Airflow CLI container"
+    echo "  build   : Build the custom Airflow image"
 }
 
 if [ -z "$1" ]; then
@@ -41,6 +42,10 @@ case "$1" in
     cli)
         echo "Entering Airflow CLI session..."
         docker compose -f "$COMPOSE_FILE" run --entrypoint bash airflow-cli
+        ;;
+    build)
+        echo "Building custom Airflow image..."
+        docker compose -f "$COMPOSE_FILE" build
         ;;
     *)
         show_usage
