@@ -9,7 +9,7 @@
 - Postgres 단일 인스턴스 내 스키마 분리(staging, dw, dm) 및 가짜 데이터(CSV) 구성 완료
 - Spark JDBC 드라이버(42.7.11)의 이미지 빌드 타임 다운로드 내장 및 docker-compose 환경변수(PYSPARK_SUBMIT_ARGS)를 통한 로딩 구성 완료
 - dbt 프로젝트 생성 및 `staging -> dw -> dm` 순차 변환 흐름 구성 완료
-- 다음 작업 포커스: Marquez가 제거되었으므로, Column-level Lineage(CLL) 시각화를 지원하는 새로운 백엔드(예: DataHub) 도입 방안 논의 및 환경 구성
+- Marquez 연동 복구 완료: 사용자의 `docker-compose-marquez.yml` 사양을 원본 그대로 보존한 상태로 Airflow/Spark OpenLineage 설정 및 run.sh 타겟 구동 로직 복원 완료
 
 ## Temporary Notes
 

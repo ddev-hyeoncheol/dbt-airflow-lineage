@@ -23,7 +23,9 @@ x-airflow-common:
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
 
     # OpenLineage & PySpark Settings
+    OPENLINEAGE_URL: 'http://marquez:5000'
     AIRFLOW__OPENLINEAGE__NAMESPACE: 'dbt-airflow-poc'
+    AIRFLOW__OPENLINEAGE__TRANSPORT: '{"type": "http", "url": "http://marquez:5000", "endpoint": "api/v1/lineage"}'
     PYSPARK_SUBMIT_ARGS: "--jars /opt/airflow/postgresql-42.7.11.jar,/opt/airflow/openlineage-spark_2.13-1.49.0.jar pyspark-shell"
   volumes:
     - ./airflow/dags:/opt/airflow/dags

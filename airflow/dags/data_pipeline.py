@@ -23,6 +23,13 @@ def run_pyspark_ingestion(file_name: str, target_table: str):
     # Build Spark Session (JDBC driver loaded via PYSPARK_SUBMIT_ARGS)
     spark = (
         SparkSession.builder.appName(f"Ingest_{target_table}")
+        .config(
+            "spark.extraListeners",
+            "io.openlineage.spark.agent.OpenLineageSparkListener",
+        )
+        .config("spark.openlineage.transport.type", "http")
+        .config("spark.openlineage.transport.url", "http://marquez:5000")
+        .config("spark.openlineage.namespace", "spark-ingest")
         .master("local[*]")
         .getOrCreate()
     )
