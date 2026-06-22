@@ -36,7 +36,7 @@ with DAG(
     start_date=datetime(2026, 1, 1),
     schedule=None,
     catchup=False,
-    tags=["pyspark", "dbt", "poc"],
+    tags=["pyspark", "dbt", "openlineage", "marquez"],
 ) as dag:
 
     staging_customers = PythonOperator(
