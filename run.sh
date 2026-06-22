@@ -13,6 +13,14 @@ ensure_network() {
     fi
 }
 
+# Ensure .env file exists with correct AIRFLOW_UID
+ensure_env() {
+    if [ ! -f ".env" ]; then
+        echo "Creating .env file with local user's AIRFLOW_UID..."
+        echo "AIRFLOW_UID=$(id -u)" > .env
+    fi
+}
+
 show_usage() {
     echo "Usage: $0 {up|down|restart|logs|ps|cli|build} [target]"
     echo "  up [target]      : Start containers (default target: all)"
@@ -44,6 +52,7 @@ is_target() {
 
 case "$ACTION" in
     up)
+        ensure_env
         ensure_network
         if is_target marquez; then
             echo "Starting Marquez containers..."
@@ -55,6 +64,7 @@ case "$ACTION" in
         fi
         ;;
     down)
+        ensure_env
         if is_target airflow; then
             echo "Stopping Airflow 3.x containers..."
             docker compose -f "$COMPOSE_FILE" down
@@ -89,10 +99,12 @@ case "$ACTION" in
         fi
         ;;
     cli)
+        ensure_env
         echo "Entering Airflow CLI session..."
         docker compose -f "$COMPOSE_FILE" run --rm --entrypoint bash airflow-cli
         ;;
     build)
+        ensure_env
         echo "Building custom Airflow image..."
         docker compose -f "$COMPOSE_FILE" build
         ;;

@@ -60,6 +60,7 @@ with DAG(
     dw_customer_orders = BashOperator(
         task_id="dw_customer_orders",
         bash_command="""
+            dbt run --project-dir /opt/airflow/dbt --profiles-dir /opt/airflow/dbt --select customer_orders --target-path target/dw/customer_orders &&
             dbt docs generate --project-dir /opt/airflow/dbt --profiles-dir /opt/airflow/dbt --target-path target/dw/customer_orders &&
             dbt-ol run --project-dir /opt/airflow/dbt --profiles-dir /opt/airflow/dbt --select customer_orders --target-path target/dw/customer_orders
         """,
@@ -68,6 +69,7 @@ with DAG(
     dm_daily_sales_summary = BashOperator(
         task_id="dm_daily_sales_summary",
         bash_command="""
+            dbt run --project-dir /opt/airflow/dbt --profiles-dir /opt/airflow/dbt --select daily_sales_summary --target-path target/dm/daily_sales_summary &&
             dbt docs generate --project-dir /opt/airflow/dbt --profiles-dir /opt/airflow/dbt --target-path target/dm/daily_sales_summary &&
             dbt-ol run --project-dir /opt/airflow/dbt --profiles-dir /opt/airflow/dbt --select daily_sales_summary --target-path target/dm/daily_sales_summary
         """,
@@ -76,6 +78,7 @@ with DAG(
     dm_customer_rfm_analysis = BashOperator(
         task_id="dm_customer_rfm_analysis",
         bash_command="""
+            dbt run --project-dir /opt/airflow/dbt --profiles-dir /opt/airflow/dbt --select customer_rfm_analysis --target-path target/dm/customer_rfm_analysis &&
             dbt docs generate --project-dir /opt/airflow/dbt --profiles-dir /opt/airflow/dbt --target-path target/dm/customer_rfm_analysis &&
             dbt-ol run --project-dir /opt/airflow/dbt --profiles-dir /opt/airflow/dbt --select customer_rfm_analysis --target-path target/dm/customer_rfm_analysis
         """,
