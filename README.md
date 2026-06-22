@@ -93,8 +93,11 @@ sequenceDiagram
 ```
 
 구동 완료 후 브라우저를 통해 아래 주소로 웹 UI에 접속할 수 있습니다:
-- **Apache Airflow**: [http://localhost:8080](http://localhost:8080) (로그인 없이 Admin 자동 접속)
+- **Apache Airflow**: [http://localhost:8080](http://localhost:8080) (로그인 계정 - ID: `airflow` / PW: `airflow`)
 - **Marquez UI**: [http://localhost:3000](http://localhost:3000)
+
+> [!NOTE]
+> Airflow에서 `data-pipeline` DAG를 최소 1회 실행(Trigger)해야 Marquez UI에 데이터 계보(Lineage)가 수집되어 나타납니다.
 
 ---
 
