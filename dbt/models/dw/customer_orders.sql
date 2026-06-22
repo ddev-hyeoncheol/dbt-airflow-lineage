@@ -8,7 +8,7 @@ with customers as (
         customer_id,
         customer_name as name,
         email
-    from staging.customers
+    from {{ source('staging', 'customers') }}
 ),
 
 orders as (
@@ -17,7 +17,7 @@ orders as (
         customer_id,
         order_date,
         status
-    from staging.orders
+    from {{ source('staging', 'orders') }}
 ),
 
 order_items as (
@@ -25,7 +25,7 @@ order_items as (
         order_id,
         price,
         quantity
-    from staging.order_items
+    from {{ source('staging', 'order_items') }}
 ),
 
 order_details as (
